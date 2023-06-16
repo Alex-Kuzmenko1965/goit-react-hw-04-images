@@ -1,6 +1,5 @@
 // import  cl from './App.module.css';
 import { useEffect } from 'react';
-// import ErrorMessage from "./components/ErrorMessage";
 import { Searchbar } from './components/Searchbar/Searchbar';
 import { getImagesGalery } from "./api";
 import { ImageGallery } from './components/ImageGallery/ImageGallery';
@@ -27,41 +26,34 @@ export default function App() {
   const { limit } = useStateContext();
   
   useEffect(() => {
-    // if (((prevSearchQuery) => prevSearchQuery !== searchQuery) || ((prevCurrentPage) => prevCurrentPage !== currentPage))
-    if ("" !== searchQuery || 1 !== currentPage)
-    { fetchGallery(); } 
-  },)
-
-  const fetchGallery = async () => {    
-    await setStatus(STATUS.PENDING);   
-
-    try {
-      const data = await getImagesGalery({ searchQuery, currentPage, limit });
-      // console.log(data);
-
-      if (!data.hits.length) {
-        throw new Error("No matches found");
+    if (!searchQuery) return;
+    const fetchGallery = async () => {    
+      await setStatus(STATUS.PENDING);   
+  
+      try {
+        const data = await getImagesGalery({ searchQuery, currentPage, limit });
+        // console.log(data);
+  
+        if (!data.hits.length) {
+          throw new Error("No matches found");
+        }
+        
+        setHits((prevHits) => [...prevHits, ...data.hits]);      
+        setTotalPages(Math.ceil(data.totalHits / limit));
+        setStatus(STATUS.RESOLVED);
+        setError(null);
+      } catch (error) {
+        setError(error.message);
+        setStatus(STATUS.REJECTED);
       }
-      
-      setHits((prevHits) => [...prevHits, ...data.hits]);      
-      setTotalPages(Math.ceil(data.totalHits / limit));
-      setStatus(STATUS.REJECTED);
-      setError(null);
-    } catch (error) {
-      setError(error.message);
-      setStatus(STATUS.REJECTED);
-    }
-  };
- 
-  const handleSearchChange = event => {    
-    setSearchQuery(event.currentTarget.value);
-    console.log(searchQuery);
-  };
+    };    
+    fetchGallery();
+  }, [searchQuery, currentPage, limit, setError, setHits, setStatus, setTotalPages]);
 
   const handleFormSubmit = searchQuery => {
-    setSearchQuery(searchQuery);
     setHits([]);
     setCurrentPage(1);
+    setSearchQuery(searchQuery);
   };
 
   const handleLoadMore = () => {
@@ -81,7 +73,7 @@ export default function App() {
     <>
       <Searchbar
       searchQuery = {searchQuery}
-      onChange = {handleSearchChange}
+      // onChange = {handleSearchChange}
       onSubmit = {handleFormSubmit} />
       <ImageGallery 
         currentPage = {currentPage}
@@ -101,8 +93,9 @@ export default function App() {
       )}
       {isModalOpen && (
         <Modal
+        isModalOpen = {isModalOpen}
         largeImageURL={largeImageURL}
-        openModal={openModal}
+        // openModal={openModal}
         handleModal={handleModal}
         />
       )}

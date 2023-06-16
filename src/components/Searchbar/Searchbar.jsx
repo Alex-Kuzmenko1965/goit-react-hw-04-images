@@ -1,27 +1,21 @@
 import cl from './Searchbar.module.css';
-import React, { Component } from 'react';
+import { useState } from 'react';
 
-export class Searchbar extends Component {
-  state = {    
-    searchQuery: "",
-  }
+export function Searchbar({searchQuery, onSubmit}) {
+  const [query, setQuery] = useState("");
 
-  handleSearchChange = event => {    
-    this.setState({ searchQuery: event.currentTarget.value });
-    console.log(this.state.searchQuery);
+  const handleSearchChange = event => {    
+    setQuery(event.currentTarget.value);
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();    
-    this.props.onSubmit(this.state.searchQuery);
-    this.setState({ searchQuery: event.currentTarget.value });
+    onSubmit(query);    
   };
 
-  render () {       
-    
-    return (
+  return (
       <header className={cl.searchbar}>
-        <form className={cl.form} onSubmit={this.handleSubmit}>
+        <form className={cl.form} onSubmit={handleSubmit}>
           <button type="submit" className={cl.searchForm_button} >
             Search
           </button>
@@ -31,11 +25,10 @@ export class Searchbar extends Component {
             type="text"
             name="search"            
             placeholder="Search images and photos"
-            value={this.state.searchQuery}
-            onChange={this.handleSearchChange}
+            value={query}
+            onChange={handleSearchChange}
           />
         </form>
       </header>
-    );
-  };
-}
+  );
+};

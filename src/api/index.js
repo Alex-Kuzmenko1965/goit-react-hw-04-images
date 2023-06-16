@@ -8,6 +8,6 @@ export const getImagesGalery = async ({searchQuery, currentPage, limit }) => {
   if (!response.ok) {
     throw new Error("Smth went wrong");
   }
-    
+
   return response.json();
 }

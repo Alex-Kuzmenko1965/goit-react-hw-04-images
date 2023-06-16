@@ -9,19 +9,19 @@ export const ImageGallery = ({ currentPage, hits, totalPages, error, status, STA
 
   if (status === STATUS.RESOLVED) {
     return (
-    <ul className={cl.imageGallery} onClick={openModal} >
-      {hits.map(({ id, webformatURL, type, largeImageURL }) => {
-        return (
-          <ImageGalleryItem
-          id = {id} 
-          webformatURL = {webformatURL}
-          largeImageURL = {largeImageURL}
-          type={type} /> 
-        );})
-      }
-    </ul>
-  );
-}
+      <ul className={cl.imageGallery} onClick={openModal} >
+        {hits.map(({ id, webformatURL, type, largeImageURL }) => {
+          return (
+            <ImageGalleryItem
+            id = {id}
+            webformatURL = {webformatURL}
+            largeImageURL = {largeImageURL}
+            type={type} />
+          );})
+        }
+      </ul>
+    );
+  }
 
   if (status === STATUS.REJECTED) {
     return <ErrorMessage>{error}</ErrorMessage>;
