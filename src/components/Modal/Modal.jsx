@@ -5,22 +5,24 @@ import cl from './Modal.module.css';
 export function Modal({largeImageURL, handleModal, isModalOpen }) {
 
   useEffect(() => {
+    const closeOnEsc = (e) => {
+      if (e.code === "Escape") {
+        handleModal();
+        window.removeEventListener("keydown", closeOnEsc);
+        document.body.style.overflow = "visible";
+        // console.log("ESC");
+      }};
     window.addEventListener("keydown", closeOnEsc);
-    document.body.style.overflow = "hidden";});  
-
-  const closeOnEsc = (e) => {
-    if (e.code === "Escape") {
-      handleModal();
+    document.body.style.overflow = "hidden";
+    return () => {
       window.removeEventListener("keydown", closeOnEsc);
-      document.body.style.overflow = "visible";
-      // console.log("ESC");
-    }};
+      // document.body.style.overflow = "visible";
+    };
+  }, [handleModal]);
   
   const handleBackdropClick = (e) => {
     if (e.currentTarget === e.target) {
-      handleModal();
-      window.removeEventListener("keydown", closeOnEsc);
-      document.body.style.overflow = "visible";
+      handleModal();      
       // console.log("Backdrop");
     }
   };

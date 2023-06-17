@@ -1,11 +1,11 @@
 // import  cl from './App.module.css';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Searchbar } from './components/Searchbar/Searchbar';
 import { getImagesGalery } from "./api";
 import { ImageGallery } from './components/ImageGallery/ImageGallery';
 import { Button } from "./components/Button/Button";
 import { Modal } from "./components/Modal/Modal";
-import { useStateContext } from "./context/StateContext";
+// import { useStateContext } from "./context/StateContext";
 
 const STATUS = {
   IDLE: "idle",
@@ -15,15 +15,23 @@ const STATUS = {
 };
 
 export default function App() {
-  const { hits, setHits } = useStateContext();
-  const { searchQuery, setSearchQuery } = useStateContext();
-  const { currentPage, setCurrentPage } = useStateContext();
-  const { status, setStatus } = useStateContext();
-  const { error, setError } = useStateContext();
-  const { totalPages, setTotalPages } = useStateContext();
-  const { isModalOpen, setIsModalOpen } = useStateContext();
-  const { largeImageURL, setLargeImageURL } = useStateContext();
-  const { limit } = useStateContext();
+  const [hits, setHits] = 
+  useState([]);
+  const [searchQuery, setSearchQuery] = 
+  useState("");
+  const [status, setStatus] = 
+  useState(STATUS.IDLE);
+  const [error, setError] = 
+  useState(null);  
+  const [currentPage, setCurrentPage] = 
+  useState(1);  
+  const [totalPages, setTotalPages] = 
+  useState(1);
+  const [isModalOpen, setIsModalOpen] = 
+  useState(false);
+  const [largeImageURL, setLargeImageURL] = 
+  useState("");
+  const limit = 12;
   
   useEffect(() => {
     if (!searchQuery) return;
@@ -48,7 +56,7 @@ export default function App() {
       }
     };    
     fetchGallery();
-  }, [searchQuery, currentPage, limit, setError, setHits, setStatus, setTotalPages]);
+  }, [searchQuery, currentPage, limit]);
 
   const handleFormSubmit = searchQuery => {
     setHits([]);
